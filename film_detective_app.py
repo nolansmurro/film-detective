@@ -27,7 +27,7 @@ def resize_and_crop_image(image, size):
     return image
 
 def preprocess_image(image):
-    processed_image = resize_and_crop_image(image, (600,600))
+    processed_image = resize_and_crop_image(image, (700,700))
     processed_image = np.array(processed_image)
     processed_image = processed_image / 255.0
     processed_image = np.expand_dims(processed_image, axis=0)
