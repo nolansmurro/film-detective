@@ -4,7 +4,6 @@ from PIL import Image
 import numpy as np
 # import matplotlib.cm as cm
 import tensorflow as tf
-# import config
 from image_preprocessing import crop_resize
 
 # def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
