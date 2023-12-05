@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 # import matplotlib.cm as cm
 import tensorflow as tf
-import config
+# import config
 from image_preprocessing import crop_resize
 
 # def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
@@ -37,7 +37,7 @@ def preprocess_image(image):
     return processed_image
     
 model = load_model('../model_checkpoints/checkpoint_20-0.81.h5')
-last_conv_layer_name = config.last_conv_layer_name
+# last_conv_layer_name = 'conv2d_4'
 
 st.title('Film Detective')
 
