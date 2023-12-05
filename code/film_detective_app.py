@@ -7,27 +7,27 @@ import tensorflow as tf
 import config
 from image_preprocessing import crop_resize
 
-def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
-    grad_model = tf.keras.models.Model(
-        [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
-    )
+# def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
+#     grad_model = tf.keras.models.Model(
+#         [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+#     )
     
-    with tf.GradientTape() as tape:
-        last_conv_layer_output, preds = grad_model(img_array)
-        if pred_index is None:
-            pred_index = tf.argmax(preds[0])
-        class_channel = preds[:, pred_index]
+#     with tf.GradientTape() as tape:
+#         last_conv_layer_output, preds = grad_model(img_array)
+#         if pred_index is None:
+#             pred_index = tf.argmax(preds[0])
+#         class_channel = preds[:, pred_index]
     
-    grads = tape.gradient(class_channel, last_conv_layer_output)
+#     grads = tape.gradient(class_channel, last_conv_layer_output)
     
-    pooled_grads = tf.reduce_mean(grads, axis =(0, 1, 2))
+#     pooled_grads = tf.reduce_mean(grads, axis =(0, 1, 2))
     
-    last_conv_layer_output = last_conv_layer_output[0]
-    heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
-    heatmap = tf.squeeze(heatmap)
+#     last_conv_layer_output = last_conv_layer_output[0]
+#     heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+#     heatmap = tf.squeeze(heatmap)
     
-    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
-    return heatmap.numpy()
+#     heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+#     return heatmap.numpy()
 
 def preprocess_image(image):
     processed_image = crop_resize(image, (700,700))
@@ -56,7 +56,7 @@ if uploaded_file is not None:
     
         st.write(f'Predicted Class: {predicted_class}')
         
-        heatmap = make_gradcam_heatmap(processed_image, model, last_conv_layer_name)
+#         heatmap = make_gradcam_heatmap(processed_image, model, last_conv_layer_name)
         
-        st.write('Grad-CAM Heatmap:')
-        st.image(heatmap, use_column_width=True)
+#         st.write('Grad-CAM Heatmap:')
+#         st.image(heatmap, use_column_width=True)
