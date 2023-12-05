@@ -35,7 +35,7 @@ def preprocess_image(image):
     processed_image = np.expand_dims(processed_image, axis=0)
     return processed_image
     
-model = load_model('../model_checkpoints/checkpoint_20-0.81.h5')
+model = load_model('model_checkpoints/checkpoint_20-0.81.h5')
 # last_conv_layer_name = 'conv2d_4'
 
 st.title('Film Detective')
