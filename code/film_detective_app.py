@@ -5,7 +5,7 @@ import numpy as np
 # import matplotlib.cm as cm
 import tensorflow as tf
 from image_preprocessing import crop_resize
-# import os
+import os
 
 # def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
 #     grad_model = tf.keras.models.Model(
@@ -35,8 +35,11 @@ def preprocess_image(image):
     processed_image = processed_image / 255.0
     processed_image = np.expand_dims(processed_image, axis=0)
     return processed_image
-    
-model = load_model('model_checkpoints/checkpoint_20-0.81.h5')
+
+model_path = os.path.join(os.path.dirname(__file__), 'model_checkpoints', 'checkpoint_20-0.81.h5')
+model = load_model(model_path)
+
+# model = load_model('model_checkpoints/checkpoint_20-0.81.h5')
 # last_conv_layer_name = 'conv2d_4'
 
 st.title('Film Detective')
