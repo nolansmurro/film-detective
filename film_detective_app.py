@@ -60,9 +60,11 @@ model = load_model(model_path)
 
 last_conv_layer_name = 'conv2d_4'
 
-st.title('Film Detective')
+st.title('Film Detective 🔍')
 
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg"])
+st.write('What is the origin of your image? Find out if your photo was shot on a film or digital camera.')
+
+uploaded_file = st.file_uploader('Upload a digital or film photo...', type=['jpg', 'jpeg'])
 
 if uploaded_file is not None:
     uploaded_image = Image.open(uploaded_file)
@@ -75,7 +77,7 @@ if uploaded_file is not None:
     
         predicted_class = 'Film' if predictions[0][0] > 0.5 else 'Digital'
     
-        st.write(f'Predicted Class: {predicted_class}')
+        st.success(f'Your image is likely a {predicted_class} photo')
         
         heatmap = make_gradcam_heatmap(processed_image, model, last_conv_layer_name)
         
