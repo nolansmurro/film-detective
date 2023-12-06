@@ -67,7 +67,7 @@ last_conv_layer_name = 'conv2d_4'
 
 st.title('Film Detective 🔍')
 
-st.write('What is the origin of your image? Find out if your photo was shot with a film or digital camera through the power of deep learning!')
+st.write('What is the origin of your image? Find out if your photo was shot on film or with a digital camera through the power of deep learning!')
 
 uploaded_file = st.file_uploader('Upload a digital or film photo...', type=['jpg', 'jpeg'])
 
