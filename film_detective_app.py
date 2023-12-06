@@ -67,7 +67,7 @@ last_conv_layer_name = 'conv2d_4'
 
 st.title('Film Detective 🔍')
 
-st.write('What is the origin of your image? Find out if your photo was shot on a film or digital camera.')
+st.write('What is the origin of your image? Find out if your photo was shot with a film or digital camera through the power of deep learning!')
 
 uploaded_file = st.file_uploader('Upload a digital or film photo...', type=['jpg', 'jpeg'])
 
@@ -75,18 +75,24 @@ if uploaded_file is not None:
     uploaded_image = Image.open(uploaded_file)
     st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
     
-    if st.button('Classify Image'):
+    if st.button('Investigate Image'):
         processed_image = preprocess_image(uploaded_image)
     
         predictions = model.predict(processed_image)
     
         predicted_class = 'Film' if predictions[0][0] > 0.5 else 'Digital'
-    
-        st.success(f'Your image is likely a {predicted_class} photo')
+        
+        st.subheader('Result:')
+        
+        if predicted_class == 'Film':
+            st.success(f'Your image was likely shot on film!')
+        else:
+            st.success(f'Your image was most likely shot on a digital camera or created with digital techniques.')
         
         heatmap = make_gradcam_heatmap(processed_image, model, last_conv_layer_name)
-        
         combined_image = overlay_gradcam_heatmap(heatmap, uploaded_image) 
-        st.write('Grad-CAM Heatmap:')
+        
+        st.subheader('Grad-CAM Heatmap')
+        st.write('This heatmap highlights which parts of your image were most important to the deep learning model in its decision:')
         st.image(combined_image, use_column_width=True)
 
