@@ -3,10 +3,12 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 import tensorflow as tf
-from image_preprocessing import crop_resize
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import os
+import config
+from image_preprocessing import crop_resize
+
 
 def preprocess_image(image):
     processed_image = crop_resize(image, (700,700))
@@ -47,13 +49,13 @@ def overlay_gradcam_heatmap(heatmap, uploaded_image):
         heatmap_resized = (heatmap_resized - heatmap_min) / (heatmap_max - heatmap_min)
     heatmap_normalized = np.uint8(255 * heatmap_resized)
 
-    heatmap_colored = cm.jet(heatmap_normalized)[..., :3]
+    heatmap_colored = cm.plasma(heatmap_normalized)[..., :3]
     heatmap_colored = Image.fromarray((heatmap_colored * 255).astype(np.uint8))
 
     combined_image = Image.blend(uploaded_image.convert('RGB'), heatmap_colored, alpha=0.5)
     return combined_image
 
-model_path = os.path.join(os.path.dirname(__file__), 'model_checkpoints', 'checkpoint_20-0.81.h5')
+model_path = os.path.join(os.path.dirname(__file__), 'models', 'checkpoint_20-0.81.h5')
 model = load_model(model_path)
 
 last_conv_layer_name = 'conv2d_4'
