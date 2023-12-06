@@ -6,7 +6,12 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import os
-import config
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+scripts_dir = os.path.join(current_dir, 'scripts')
+if scripts_dir not in sys.path:
+    sys.path.append(scripts_dir)
 from image_preprocessing import crop_resize
 
 
