@@ -76,9 +76,13 @@ if uploaded_file is not None:
     st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
     
     if st.button('Investigate Image'):
+        progress_bar = st.progress(0)
+        
         processed_image = preprocess_image(uploaded_image)
+        progress_bar.progress(33)
     
         predictions = model.predict(processed_image)
+        progress_bar.progress(66)
     
         predicted_class = 'Film' if predictions[0][0] > 0.5 else 'Digital'
         
@@ -90,9 +94,9 @@ if uploaded_file is not None:
             st.success(f'Your image was most likely shot on a digital camera or created with digital techniques.')
         
         heatmap = make_gradcam_heatmap(processed_image, model, last_conv_layer_name)
-        combined_image = overlay_gradcam_heatmap(heatmap, uploaded_image) 
+        combined_image = overlay_gradcam_heatmap(heatmap, uploaded_image)
+        progress_bar.progress(100)
         
         st.subheader('Grad-CAM Heatmap')
         st.write('This heatmap highlights which parts of your image were most important to the deep learning model in its decision:')
         st.image(combined_image, use_column_width=True)
-
