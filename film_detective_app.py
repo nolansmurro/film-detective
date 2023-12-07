@@ -91,7 +91,7 @@ if uploaded_file is not None:
         if predicted_class == 'Film':
             st.success(f'Your image was likely shot on film!')
         else:
-            st.success(f'Your image was most likely shot on a digital camera or created with digital techniques.')
+            st.success(f'Your image was most likely shot on a digital camera.')
         
         heatmap = make_gradcam_heatmap(processed_image, model, last_conv_layer_name)
         combined_image = overlay_gradcam_heatmap(heatmap, uploaded_image)
