@@ -60,7 +60,7 @@ def overlay_gradcam_heatmap(heatmap, uploaded_image):
     combined_image = Image.blend(uploaded_image.convert('RGB'), heatmap_colored, alpha=0.5)
     return combined_image
 
-model_path = os.path.join(os.path.dirname(__file__), 'models', 'checkpoint_20-0.81.h5')
+model_path = os.path.join(os.path.dirname(__file__), 'models', 'checkpoint_28-0.85.h5')
 model = load_model(model_path)
 
 last_conv_layer_name = 'conv2d_4'
