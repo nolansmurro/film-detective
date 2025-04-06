@@ -4,7 +4,7 @@
 The project aims to develop a Convolutional Neural Network (CNN) model that can accurately classify images as either film or digital. By leveraging deep learning techniques, this model seeks to assist photographers, archivists, digital image analysts, and image hosting services in efficiently categorizing photographic content and understanding its origins.
 
 ## Executive Summary
-This project presents a CNN model capable of distinguishing between film and digital photography. Utilizing a dataset of images processed and augmented through various Python scripts, the model undergoes training to learn the distinctive features of each category. A Streamlit web application integrates the model, offering users an interactive platform to upload images, receive predictions, and view Grad-CAM heatmaps highlighting influential image regions.
+This project presents a CNN model capable of distinguishing between film and digital photography. Utilizing a dataset of images processed and augmented through various Python scripts, the model undergoes training to learn the distinctive features of each category. A Streamlit web application integrates the model, offering users an interactive platform to upload images, receive predictions, and view Grad-CAM heatmaps highlighting influential image regions for model interpretability.
 
 ### Key Components
 - Image preprocessing and augmentation scripts for dataset preparation.
