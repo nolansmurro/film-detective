@@ -45,6 +45,7 @@ The CNN model is trained on the preprocessed images, with an architecture consis
 The Streamlit app provides an interface for users to upload images and receive predictions. It visualizes Grad-CAM heatmaps, offering insights into the model's decision-making process.
 
 ### Using the App
+- https://film-detective.streamlit.app/
 - Upload an image using the provided uploader.
 - Click on 'Investigate Image' to get the prediction.
 - View the classification result and the corresponding heatmap.
