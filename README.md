@@ -1,63 +1,123 @@
 # Film vs. Digital Photo Classifier
 
-## Problem Statement
-The project aims to develop a Convolutional Neural Network (CNN) model that can accurately classify images as either film or digital. By leveraging deep learning techniques, this model seeks to assist photographers, archivists, digital image analysts, and image hosting services in efficiently categorizing photographic content and understanding its origins.
+## Image Classification Based on Photo Origin
 
-## Executive Summary
-This project presents a CNN model capable of distinguishing between film and digital photography. Utilizing a dataset of images processed and augmented through various Python scripts, the model undergoes training to learn the distinctive features of each category. A Streamlit web application integrates the model, offering users an interactive platform to upload images, receive predictions, and view Grad-CAM heatmaps highlighting influential image regions for model interpretability.
+## Overview
+This project explores the visual characteristics of photographs taken with film versus digital cameras using a binary image classification model. The goal is to train a deep learning model that accurately classifies images as either film or digital based solely on visual characteristics.
 
-### Key Components
-- Image preprocessing and augmentation scripts for dataset preparation.
-- CNN model architecture with multiple convolutional, max-pooling, dropout, and dense layers.
-- Grad-CAM heatmap generation for interpretability.
-- Streamlit web application for user interaction and visualization.
+A convolutional neural network (CNN) was developed and deployed through a Streamlit web application, enabling users to upload a photo and receive a prediction with a Grad-CAM heatmap for interpretability.
 
-<!-- ## File Directory / Table of Contents
-```
-- README.md
-- code/
-  - image_preprocessing.py
-  - cnn_model_script.py
-  - streamlit_app.py
-- datasets/
-  - film/
-  - digital/
-- models/
-  - checkpoint_20-0.81.h5
-- requirements.txt
-``` -->
+## Feature Objectives
+While the model functions as a black box, certain stylistic and technical characteristics likely influence its classification decisions. 
+Based on domain knowledge and image curation experience, the following features were hypothesized to be distinguishing factors between film and digital photographs:
 
-<!-- ## Installation and Setup
-1. Clone the repository.
-2. Install the required libraries: `pip install -r requirements.txt`.
-3. Run the Streamlit app: `streamlit run streamlit_app.py`.
+- **Grain vs. Noise Texture**: Film images often contain irregular organic grain patterns, while digital photos may exhibit more uniform sensor noise
+- **Dynamic Range and Highlight Roll-off**: Film typically handles highlights more softly, with smoother roll-off and less abrupt clipping compared to digital sensors.
+- **Color Rendition**: Film photos often exhibit warmer tones or distinctive color shifts (e.g., greens in Kodak Gold, reds in Portra), whereas digital images may present more clinical or true-to-life colors.
+- **Sharpness and Detail**: Digital images—especially from modern sensors—tend to be sharper and more crisp  than film, which may appear softer.
+- **Bokeh Quality**: Bokeh characteristics such as shape, quality, and texture may differ in film and digital images due to hardware differences such as lense evolutions. 
+- **Other Artifacts**: Light leaks and halos are common artifacts in scanned film. While digital photos may be more subject to moiré, aliasing, and rolling shutter.
+
+While Grad-CAM visualizations help identify image regions the model attends to, they do not explicitly confirm which features are being used. These hypotheses provide a framework for interpreting both model behavior and potential misclassifications.
 
 ## Data Dictionary
-| Feature       | Description                              |
-|---------------|------------------------------------------|
-| Image         | JPEG image files                  |
-| Label         | Categorized as 'Film' or 'Digital'       | -->
+| Feature       | Type    | Description                                                  |
+|---------------|---------|--------------------------------------------------------------|
+| Image         | jpeg    | RGB image of arbitrary dimension                            |
+| Label         | string  | Classification label: 'film' or 'digital'                   |
 
-## Model Training and Evaluation
-The CNN model is trained on the preprocessed images, with an architecture consisting of convolutional layers for feature extraction and dense layers for classification. The model's performance is evaluated based on accuracy, and Grad-CAM heatmaps are generated for interpretability.
+## Executive Summary
+This project was completed in five phases:
 
-## Streamlit Web Application
-The Streamlit app provides an interface for users to upload images and receive predictions. It visualizes Grad-CAM heatmaps, offering insights into the model's decision-making process.
+- **Data Collection**: Images were collected from Flickr groups using the Flickr API.
+- **Preprocessing**: Images were cropped and resized uniformly, then split into training and validation sets.
+- **Modeling**: A custom CNN architecture was trained with early stopping and L2 regularization.
+- **Evaluation**: Model performance was assessed using accuracy, loss curves, and confusion matrices.
+- **Deployment**: A Streamlit app was developed to allow users to upload photos and view predictions with Grad-CAM visualizations.
 
-### Using the App
-- https://film-detective.streamlit.app/
-- Upload an image using the provided uploader.
-- Click on 'Investigate Image' to get the prediction.
-- View the classification result and the corresponding heatmap.
+The model reached a validation accuracy of approximately 84.7%.
 
-## Conclusions and Recommendations
-The project demonstrates the potential of CNNs in image classification tasks, particularly in distinguishing between film and digital photos. Future improvements could include expanding the dataset, refining the model architecture, and enhancing the Streamlit app's functionality.
+## Data Collection
+Images were collected from public Flickr groups:
+- https://www.flickr.com/groups/filmdatabase/
+- https://www.flickr.com/groups/digitalp/
 
-## Sources
-<!-- - Image dataset: [Specify dataset source if applicable] -->
-- TensorFlow and Keras for model building.
-- PIL, NumPy, and Matplotlib for image processing and visualization.
+Using the Flickr API, roughly 60,000 images (30,000 per class) were downloaded. Duplicate and broken images were excluded via ID logging and exception handling.
+
+## Data Preprocessing
+Images were processed using a custom `crop_resize` function that:
+- Maintains aspect ratio
+- Resizes to 700x700 pixels
+- Normalizes pixel values to [0, 1]
+
+The dataset was randomly split 80/20 into training and validation folders by class.
+
+
+## Model Architecture
+A custom Convolutional Neural Network was implemented using Keras.
+
+| Layer              | Details                             |
+|--------------------|-------------------------------------|
+| Conv2D (32 filters) + MaxPooling | 3x3 filter         |
+| Conv2D (64 filters) + MaxPooling | 2x2 filter         |
+| Conv2D (128 filters) + MaxPooling| 3x3 filter         |
+| Conv2D (256 filters) + MaxPooling| 1x1 and 2x2 filters|
+| Dense (64 units) + Dropout       | L2 regularized     |
+| Output Layer                     | Sigmoid            |
+
+Training:
+- Loss Function: Binary Crossentropy
+- Optimizer: Adam
+- Epochs: 30
+- Batch Size: 32
+- Callbacks: EarlyStopping, ModelCheckpoint
+
+## Model Evaluation
+Training progress was monitored over 30 epochs using validation accuracy and loss.
+
+- **Validation Accuracy**: ~84.7%
+- **Validation Loss**: ~0.41
+
+### Accuracy Plot
+![Accuracy](models/images/accuracy.png)
+
+### Loss Plot
+![Loss](models/images/loss.png)
+
+### Confusion Matrix – Test Set
+![Test Confusion Matrix](models/tests/test_confusion.png)
+
+This confusion matrix reflects the model’s performance on the held-out **test set** from the original Flickr-sourced dataset (20% of 60,000 images total).
+
+- **Recall for film images**: **86.9%**
+- **Recall for digital images**: **82.8%**
+
+The model demonstrates balanced performance, with a slight edge in identifying film images. This suggests that the model generalized well on the testing data, although some digital photos, potentially with film-like characteristics, were misclassified.
 
 ---
 
-This README provides a comprehensive overview of your project, ensuring clarity and ease of understanding for users and contributors. Feel free to modify or expand any section to better fit your project's specifics.
+### Confusion Matrix – Serving Set
+![Serving Confusion Matrix](models/tests/serve_confusion.png)
+
+A **serving set** was curated using personal film and digital photographs to assess real-world generalization beyond the training and test domains.
+
+- **Recall for film images**: **89.4%**
+- **Recall for digital images**: **74.5%**
+
+The model performed especially well on film images in this real-world set, likely due to the strong stylistic consistency of the images in the set. However, digital images showed lower recall, possibly due to greater stylistic variability. 
+
+
+## Streamlit App
+
+The model is deployed via Streamlit at:
+https://film-detective.streamlit.app/
+
+### Features:
+- Upload an image in JPG format
+- Classify it as "film" or "digital"
+- View a Grad-CAM heatmap overlay that highlights important regions
+
+## Conclusion
+
+This project demonstrates the potential of CNNs in distinguishing between film and digital images based on visual patterns alone. Despite the black-box nature of deep learning, Grad-CAM and performance analysis suggest the model has learned meaningful cues related to the stylistic differences in film and digital photography. Future improvements could involve training on a wider variety of devices, film stocks, and post-processing styles to further improve generalization.
+
