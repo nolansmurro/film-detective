@@ -1,6 +1,5 @@
-# Film vs. Digital Photo Classifier
-
-## Image Classification Based on Photo Origin
+# Film Detective
+## Film vs. Digital Photo Classifier
 
 ## Overview
 This project explores the visual characteristics of photographs taken with film versus digital cameras using a binary image classification model. The goal is to train a deep learning model that accurately classifies images as either film or digital based solely on visual characteristics.
